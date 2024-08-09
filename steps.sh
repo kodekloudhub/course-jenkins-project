@@ -15,3 +15,9 @@ ExecStart=/home/ec2-user/app/venv/bin/python3 /home/ec2-user/app/app.py
 
 [Install]
 WantedBy=multi-user.target
+
+
+sudo vi flaskapp.service
+sudo systemctl daemon-reload
+sudo systemctl enable flaskapp.service
+sudo systemctl start flaskapp.service
