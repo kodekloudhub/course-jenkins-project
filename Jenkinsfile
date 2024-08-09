@@ -31,7 +31,7 @@ pipeline {
                     ssh -i $MY_SSH_KEY -o StrictHostKeyChecking=no ${username}@${SERVER_IP} << 'EOF'
                     unzip -o /home/ec2-user/app/myapp.zip -d /home/ec2-user/app/
                     sudo systemctl restart flaskapp.service
-                    EOF'''
+                    << EOF'''
                 }
             }
         }
