@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Todo App</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+      }
+      h1 {
+        color: #333;
+      }
+      form {
+        margin-bottom: 20px;
+      }
+      input[type="text"],
+      textarea {
+        padding: 10px;
+        margin: 10px 0;
+        width: 300px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      input[type="submit"] {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      input[type="submit"]:hover {
+        background-color: #45a049;
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      li {
+        background-color: #fff;
+        margin-bottom: 8px;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      .task-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .task-text {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Todo App: I made some changes again!!</h1>
+
+    <!-- Add Task Form -->
+    <form method="post">
+      <input type="text" name="task_content" placeholder="Enter a new task" />
+      <input type="submit" name="add_task" value="Add Task" />
+    </form>
+
+    <!-- Display Tasks -->
+    <h2>Tasks:</h2>
+    <ul>
+      {% for id, task in tasks.items() %}
+      <li class="task-item">
+        <p class="task-text">{{ task }}</p>
+        <!-- Delete Button for Each Task -->
+        <form method="post" style="display: inline">
+          <input type="hidden" name="task_id_to_delete" value="{{ id }}" />
+          <input type="submit" name="delete_task" value="Delete" />
+        </form>
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
