@@ -28,10 +28,10 @@ pipeline {
                 withCredentials([sshUserPrivateKey(credentialsId: 'ssh-key', keyFileVariable: 'MY_SSH_KEY', usernameVariable: 'username')]) {
                     sh '''
                     scp -i $MY_SSH_KEY -o StrictHostKeyChecking=no myapp.zip  ${username}@${SERVER_IP}:/home/ec2-user/
-                    ssh -i $MY_SSH_KEY -o StrictHostKeyChecking=no ${username}@${SERVER_IP} << '__EOF__'
+                    ssh -i $MY_SSH_KEY -o StrictHostKeyChecking=no ${username}@${SERVER_IP} << '_EOF_'
                     unzip -o /home/ec2-user/app/myapp.zip -d /home/ec2-user/app/
                     sudo systemctl restart flaskapp.service
-                    << __EOF__
+                    << _EOF_
                     '''
                 }
             }
