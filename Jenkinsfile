@@ -6,7 +6,7 @@ pipeline {
 
         stage('Setup') {
             steps {
-                sh "pip install -r lambda-app/tests/requirements.txt"
+                sh "pip3 install -r lambda-app/tests/requirements.txt"
             }
         }
         stage('Test') {
