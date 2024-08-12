@@ -6,9 +6,7 @@ pipeline {
         IMAGE_TAG = "${IMAGE_NAME}:${env.BUILD_NUMBER}"
         
     }
-    def getCommitSha() {
-  return sh(returnStdout: true, script: 'git rev-parse HEAD')
-}
+
     
     stages {
 
