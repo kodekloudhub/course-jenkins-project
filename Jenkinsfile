@@ -29,7 +29,7 @@ pipeline {
             }
             
             steps {
-                sh "sam deploy --no-confirm-changeset --no-fail-on-empty-changeset"
+                sh "sam deploy --stack-name sam-app --no-confirm-changeset --no-fail-on-empty-changeset"
 
             }
         }
