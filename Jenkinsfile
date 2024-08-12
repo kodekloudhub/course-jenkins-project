@@ -4,13 +4,19 @@ pipeline {
     environment {
         IMAGE_NAME = 'sanjeevkt720/jenkins-flask-app'
         IMAGE_TAG = "${IMAGE_NAME}:${env.BUILD_NUMBER}"
-
+        
     }
+    def getCommitSha() {
+  return sh(returnStdout: true, script: 'git rev-parse HEAD')
+}
     
     stages {
 
         stage('Setup') {
             steps {
+                echo "${env.GIT_COMMIT}"
+                def gitSha = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+                echo "Current Git SHA: ${gitSha}"
                 sh "pip install -r requirements.txt"
             }
         }
