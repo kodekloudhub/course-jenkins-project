@@ -10,11 +10,19 @@ pipeline {
     
     stages {
 
+        stage('asdfj') {
+            steps {
+                script {
+                    def gitSha = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+                    echo "Current Git SHA: ${gitSha}"
+                }
+            }
+        }
+
         stage('Setup') {
             steps {
                 echo "${env.GIT_COMMIT}"
-                def gitSha = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-                echo "Current Git SHA: ${gitSha}"
+
                 sh "pip install -r requirements.txt"
             }
         }
