@@ -1,12 +1,17 @@
 pipeline {
     agent any
 
+    environment {
+        IMAGE_NAME = 'sanjeevkt720/jenkins-flask-app'
+        IMAGE_TAG = "${IMAGE_NAME}:${env.BUILD_NUMBER}"
+
+    }
     
     stages {
 
         stage('Setup') {
             steps {
-                sh "pip3 install -r lambda-app/tests/requirements.txt"
+                sh "pip install -r requirements.txt"
             }
         }
         stage('Test') {
@@ -15,24 +20,31 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Login to docker hub') {
             steps {
-                sh "sam build -t lambda-app/template.yaml"
-
+                withCredentials([usernamePassword(credentialsId: 'docker-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                sh 'echo ${PASSWORD} | docker login -u ${USERNAME} --password-stdin'}
+                echo 'Login successfully'
             }
         }
-        stage('Deploy') {
 
-            environment {
-                AWS_ACCESS_KEY_ID = credentials('aws-access-key')
-                AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')
-            }
-            
-            steps {
-                sh "sam deploy -t lambda-app/template.yaml --no-confirm-changeset --no-fail-on-empty-changeset"
-
+        stage('Build Docker Image')
+        {
+            steps
+            {
+                sh 'docker build -t ${IMAGE_TAG} .'
+                echo "Docker image build successfully"
+                
             }
         }
-      
+
+        stage('Push Docker Image')
+        {
+            steps
+            {
+                sh 'docker push ${IMAGE_TAG}'
+                echo "Docker image push successfully"
+            }
+        }      
     }
 }
