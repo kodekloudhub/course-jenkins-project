@@ -3,14 +3,7 @@ pipeline {
 
     
     stages {
-        stage('Install SAM CLI') {
-            steps {
-                sh "wget https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip"
-                sh "unzip aws-sam-cli-linux-x86_64.zip -d sam-installation"
-                sh "sudo ./sam-installation/install"
-                sh "sam --version"
-            }
-        }
+
         stage('Setup') {
             steps {
                 sh "pip install -r lambda-app/tests/requirements.txt"
