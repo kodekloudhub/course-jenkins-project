@@ -29,7 +29,7 @@ pipeline {
             }
             
             steps {
-                sh "sam deploy --stack-name sam-app --no-confirm-changeset --no-fail-on-empty-changeset"
+                sh "sam deploy -t lambda-app/template.yaml --config-file lambda-app/samconfig.toml --no-confirm-changeset --no-fail-on-empty-changeset"
 
             }
         }
