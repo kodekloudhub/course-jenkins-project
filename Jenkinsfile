@@ -3,26 +3,15 @@ pipeline {
 
     environment {
         IMAGE_NAME = 'sanjeevkt720/jenkins-flask-app'
-        IMAGE_TAG = "${IMAGE_NAME}:${env.BUILD_NUMBER}"
+        IMAGE_TAG = "${IMAGE_NAME}:${env.GIT_COMMIT}"
         
     }
 
     
     stages {
 
-        stage('asdfj') {
-            steps {
-                script {
-                    def gitSha = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-                    echo "Current Git SHA: ${gitSha}"
-                }
-            }
-        }
-
         stage('Setup') {
             steps {
-                echo "${env.GIT_COMMIT}"
-
                 sh "pip install -r requirements.txt"
             }
         }
@@ -46,6 +35,7 @@ pipeline {
             {
                 sh 'docker build -t ${IMAGE_TAG} .'
                 echo "Docker image build successfully"
+                sh 'docker image ls'
                 
             }
         }
