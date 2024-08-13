@@ -10,31 +10,16 @@ pipeline {
 
     
     stages {
-        stage('test') {
-            steps {
-                script {
-                    def service = sh(script: "kubectl get svc flask-app-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}:{.spec.ports[0].port}'", returnStdout: true).trim()
-                    echo "${service}"
-                    env.SERVICE = service
 
-                }
-            }
-        }
-
-        stage ('test2') {
-            steps {
-                echo "${env.service}"
-            }
-        }
 
         stage('Setup') {
             steps {
-                sh "pip install -r requirements.txt"
+                sh "poetry install"
             }
         }
         stage('Test') {
             steps {
-                sh "pytest"
+                sh "poetry run pytest"
             }
         }
 
