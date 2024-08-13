@@ -71,7 +71,7 @@ pipeline {
             steps {
                 sh 'kubectl config current-context'
                 echo 'kubectl config current-context'
-                sh "kubectl set image -n staging deployment/flask-app flask-app=${IMAGE_TAG} --record"
+                sh "kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}"
             }
         }
 
