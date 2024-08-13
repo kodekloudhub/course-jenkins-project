@@ -13,7 +13,7 @@ pipeline {
         stage('test') {
             steps {
                 script {
-                    def service = sh(script: "kubectl get svc myapp -o jsonpath='{.status.loadBalancer.ingress[0].hostname}:{.spec.ports[0].port}'", returnStdout: true).trim()
+                    def service = sh(script: "kubectl get svc flask-app-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}:{.spec.ports[0].port}'", returnStdout: true).trim()
                     echo "${service}"
                     echo "${env.service}"
 
