@@ -16,13 +16,13 @@ pipeline {
         stage("Check for Git Tag") {
             steps {
                 script {
-                    def tag = sh(script: "git describe --tags --exact-match || echo 'No tag'", returnStdout: true).trim()
-                    echo "${tag}"
-
-                    if (tag != null && tag =~ /^v[0-9]+\\.[0-9]+\\.[0-9]+$/) {
-                    // Store the tag if it matches the semantic versioning pattern
-                        GIT_TAG = tag
-                    }
+                    def status = sh(script: "git describe --tags --exact-match", returnStatus: true)
+                    if (status == 0) {
+                        def tag = sh(script: "git describe --tags --exact-match", returnStdout: true).trim()
+                        // Check if the tag is not null and follows semantic versioning
+                        if (tag != null && tag =~ /^v[0-9]+\\.[0-9]+\\.[0-9]+$/) {
+                            GIT_TAG = tag
+                        }
                 }
             }
         }
