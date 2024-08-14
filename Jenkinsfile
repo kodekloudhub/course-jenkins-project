@@ -4,7 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = 'sanjeevkt720/jenkins-flask-app'
         IMAGE_TAG = "${IMAGE_NAME}:${env.GIT_COMMIT}"
-        RELEASE_TAG = "0.1.1"
+        RELEASE_TAG = "0.1.2"
         KUBECONFIG = credentials('kubeconfig-credentials-id')
         
     }
