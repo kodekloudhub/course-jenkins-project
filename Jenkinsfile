@@ -4,6 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = 'sanjeevkt720/jenkins-flask-app'
         IMAGE_TAG = "${IMAGE_NAME}:${env.GIT_COMMIT}"
+        RELEASE_TAG = "0.1.0"
         KUBECONFIG = credentials('kubeconfig-credentials-id')
         
     }
@@ -14,6 +15,7 @@ pipeline {
 
         stage('Setup') {
             steps {
+                sh "printenv"
                 sh "poetry install"
             }
         }
@@ -35,7 +37,7 @@ pipeline {
         {
             steps
             {
-                sh 'docker build -t ${IMAGE_TAG} .'
+                sh 'docker build -t ${IMAGE_TAG} -t ${RELEASE_TAG} .'
                 echo "Docker image build successfully"
                 sh 'docker image ls'
                 
@@ -46,7 +48,7 @@ pipeline {
         {
             steps
             {
-                sh 'docker push ${IMAGE_TAG}'
+                sh 'docker push --all-tags ${IMAGE_NAME}'
                 echo "Docker image push successfully"
             }
         }
