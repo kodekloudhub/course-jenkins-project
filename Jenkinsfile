@@ -6,17 +6,43 @@ pipeline {
         IMAGE_TAG = "${IMAGE_NAME}:${env.GIT_COMMIT}"
         RELEASE_TAG = "0.1.4"
         KUBECONFIG = credentials('kubeconfig-credentials-id')
-        MYTAG = "${TAG_NAME}"
+        GIT_TAG = ''
         
     }
 
     
     stages {
 
+        stage("Check for Git Tag") {
+            steps {
+                script {
+                    def tag = sh(script: 'git describe --tags --exact-match', returnStdout: true).trim()
+
+                    if (tag != null && tag =~ /^v[0-9]+\\.[0-9]+\\.[0-9]+$/) {
+                    // Store the tag if it matches the semantic versioning pattern
+                        GIT_TAG = tag
+                    }
+                }
+            }
+        }
+
+        stage("blah") {
+            when {
+                expression {
+                    return GIT_TAG != "" // Only run if GIT_TAG is not empty
+                }
+            }
+
+            steps {
+                echo "yeah we detected a tag: ${GIT_TAG}"
+
+            }
+        }
+
 
         stage('Setup') {
             steps {
-                echo "My tags: ${MYTAG}"
+                echo "My tags: ${GIT_TAG}"
 
                 withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
                     sh """
