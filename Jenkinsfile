@@ -30,7 +30,7 @@ pipeline {
         
             }
             steps {
-                echo "yeah not changeRequest"
+                echo "yeah this is a PR"
             }
         }
 
