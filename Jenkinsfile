@@ -16,6 +16,7 @@ pipeline {
         stage('Setup') {
             steps {
                 sh "printenv"
+
                 sh "poetry install"
             }
         }
@@ -52,30 +53,7 @@ pipeline {
                 echo "Docker image push successfully"
             }
         }
-
-        stage('Deploy to Staging')
-        {
-            steps {
-                sh 'kubectl config current-context'
-                echo 'kubectl config current-context'
-                sh "kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}"
-            }
-        }
-
-        stage('Acceptance Test')
-        {
-            steps {
-
-                script {
-
-                    def service = sh(script: "kubectl get svc flask-app-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}:{.spec.ports[0].port}'", returnStdout: true).trim()
-                    echo "${service}"
-
-                    sh 'k6 run -e SERVICE=${service} acceptance-test.js'
-                }
-            }
-        }       
-
+    
         
     }
 }
