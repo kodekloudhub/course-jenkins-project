@@ -13,12 +13,14 @@ pipeline {
     
     stages {
         stage('Only Run if Pull Request') {
-            steps {
-                when {
+
+            when {
                     expression {
                         return env.action == 'opened'
                     }
                 }
+            steps {
+                
                 script {
                     echo "${env.action}"
                     sh "printenv"
@@ -28,10 +30,13 @@ pipeline {
         }
 
         stage('Only Run if PR is Merged') {
-            steps {
+            when {
                 expression {
                     return env.action == 'closed' && env.pullRequestMerged == 'true'
                 }
+
+            }
+            steps {
                 script {
                     echo 'PR is closed, commit: ${env.mergeCommitSha}'
                 }
