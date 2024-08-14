@@ -30,7 +30,7 @@ pipeline {
         stage("blah") {
             when {
                 expression {
-                    return GIT_TAG != "" // Only run if GIT_TAG is not empty
+                    return env.GIT_TAG != "" // Only run if GIT_TAG is not empty
                 }
             }
 
