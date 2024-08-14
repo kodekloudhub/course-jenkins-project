@@ -16,6 +16,7 @@ pipeline {
         stage('Setup') {
             steps {
                 sh "git tag -a ${RELEASE_TAG} -m 'Taggign commit ${env.GIT_COMMIT}'"
+                sh "git push origin ${RELEASE_TAG}"
 
             }
         }
@@ -33,16 +34,7 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image')
-        {
-            steps
-            {
-                sh 'docker build -t ${IMAGE_TAG} -t ${RELEASE_TAG} .'
-                echo "Docker image build successfully"
-                sh 'docker image ls'
-                
-            }
-        }
+
     
         
     }
