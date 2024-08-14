@@ -20,8 +20,8 @@ pipeline {
                     sh """
                         git config user.name 'jenkins'
                         git config user.email 'jenkins@example.com'
-                        sh "git tag -a ${RELEASE_TAG} -m 'Taggign commit ${env.GIT_COMMIT}'"
-                        sh "git push origin ${RELEASE_TAG}"
+                        git tag -a ${RELEASE_TAG} -m 'Taggign commit ${env.GIT_COMMIT}'"
+                        git push https://${GITHUB_TOKEN}@github.com/kodekloudhub/course-jenkins-project ${RELEASE_TAG}"
                     """
                 }
 
