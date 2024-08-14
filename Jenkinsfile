@@ -15,9 +15,8 @@ pipeline {
 
         stage('Setup') {
             steps {
-                sh "printenv"
+                sh "git tag -a ${RELEASE_TAG} -m 'Taggign commit ${env.GIT_COMMIT}'"
 
-                sh "poetry install"
             }
         }
         stage('Test') {
@@ -42,15 +41,6 @@ pipeline {
                 echo "Docker image build successfully"
                 sh 'docker image ls'
                 
-            }
-        }
-
-        stage('Push Docker Image')
-        {
-            steps
-            {
-                sh 'docker push --all-tags ${IMAGE_NAME}'
-                echo "Docker image push successfully"
             }
         }
     
