@@ -18,7 +18,8 @@ pipeline {
                     return env.action == 'opened'
                 }
                 script {
-                    sh 'PR Has been opened: ${env.pullRequestNumber}'
+                    sh "printenv"
+                    echo "PR Has been opened: ${env.pullRequestNumber}"
                 }
             }
         }
@@ -29,7 +30,7 @@ pipeline {
                     return env.action == 'closed' && env.pullRequestMerged == 'true'
                 }
                 script {
-                    sh 'PR is closed, commit: ${env.mergeCommitSha}'
+                    echo 'PR is closed, commit: ${env.mergeCommitSha}'
                 }
             }
         }
