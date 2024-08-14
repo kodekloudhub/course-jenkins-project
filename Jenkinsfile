@@ -12,6 +12,19 @@ pipeline {
 
     
     stages {
+        stage('initialization') {
+            steps {
+                script {
+                    def requestBody = retrieveWebhookPayload()
+                    if (!requestBody) {
+                        error "Could not retrieve webhook payload."
+                    }
+
+                    def payload = readJSON text: requestBody
+                    echo "${payload}"
+                }
+            }
+        }
 
         stage("Check for Git Tag") {
             steps {
