@@ -13,14 +13,24 @@ pipeline {
     
     stages {
 
-        stage('changerequest') {
+        stage('not changerequest') {
             when {
                     not {
                         changeRequest()
                     }
             }
             steps {
-                sh "yeah not changeRequest"
+                echo "yeah not changeRequest"
+            }
+        }
+
+        stage('changerequest') {
+            when {
+                        changeRequest()
+        
+            }
+            steps {
+                echo "yeah not changeRequest"
             }
         }
 
