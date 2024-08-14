@@ -18,6 +18,8 @@ pipeline {
                     return env.action == 'opened'
                 }
                 script {
+                    echo "${env.action}"
+                    echo "${action}"
                     sh "printenv"
                     echo "PR Has been opened: ${env.pullRequestNumber}"
                 }
