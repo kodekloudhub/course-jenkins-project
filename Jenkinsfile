@@ -24,6 +24,7 @@ pipeline {
                     def changeRequest = changeRequest()
                     echo "yeah not changeRequest"
                     echo "changerequest: ${changeRequest}"
+                    sh "printenv"
                 }
             }
         }
