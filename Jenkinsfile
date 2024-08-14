@@ -4,7 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = 'sanjeevkt720/jenkins-flask-app'
         IMAGE_TAG = "${IMAGE_NAME}:${env.GIT_COMMIT}"
-        RELEASE_TAG = "0.1.2"
+        RELEASE_TAG = "0.1.3"
         KUBECONFIG = credentials('kubeconfig-credentials-id')
         
     }
@@ -20,8 +20,8 @@ pipeline {
                     sh """
                         git config user.name 'jenkins'
                         git config user.email 'jenkins@example.com'
-                        git tag -a ${RELEASE_TAG} -m 'Taggign commit ${env.GIT_COMMIT}'"
-                        git push https://${GITHUB_TOKEN}@github.com/kodekloudhub/course-jenkins-project ${RELEASE_TAG}"
+                        git tag -a ${RELEASE_TAG} -m 'Taggign commit ${env.GIT_COMMIT}'
+                        git push https://${GITHUB_TOKEN}@github.com/kodekloudhub/course-jenkins-project ${RELEASE_TAG}
                     """
                 }
 
