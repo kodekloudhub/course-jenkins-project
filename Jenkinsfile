@@ -14,8 +14,23 @@ pipeline {
     stages {
 
         stage('bluh') {
+            when {
+                    not {
+                        changeRequest()
+                    }
+            }
             steps {
-                sh "printenv"
+                sh "yeah not changeRequest"
+            }
+        }
+
+        stage('bluh') {
+            when {
+                        changeRequest()
+
+            }
+            steps {
+                sh "yeah changeRequest"
             }
         }
         stage('Only Run if Pull Request') {
