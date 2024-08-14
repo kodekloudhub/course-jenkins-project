@@ -17,7 +17,7 @@ pipeline {
             steps {
                 script {
                     def tag = sh(returnStdout: true, script: "git tag --contains").trim()
-                    sh "git tag --contains"
+
                     if (tag != null) {
                         env.GIT_TAG = tag
                     } else {
