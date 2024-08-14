@@ -12,6 +12,12 @@ pipeline {
 
     
     stages {
+
+        stage('bluh') {
+            steps {
+                sh "printenv"
+            }
+        }
         stage('Only Run if Pull Request') {
 
             when {
@@ -38,7 +44,7 @@ pipeline {
             }
             steps {
                 script {
-                    echo 'PR is closed, commit: ${env.mergeCommitSha}'
+                    echo "PR is closed, commit: ${env.mergeCommitSha}"
                 }
             }
         }
