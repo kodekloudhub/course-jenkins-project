@@ -6,7 +6,7 @@ pipeline {
         IMAGE_TAG = "${IMAGE_NAME}:${env.GIT_COMMIT}"
         RELEASE_TAG = "0.1.4"
         KUBECONFIG = credentials('kubeconfig-credentials-id')
-
+        MYTAG = "{TAG_NAME}"
         
     }
 
@@ -22,7 +22,6 @@ pipeline {
                     sh """
                         git config user.name 'jenkins'
                         git config user.email 'jenkins@example.com'
-
                     """
                 }
 
