@@ -6,7 +6,7 @@ pipeline {
         IMAGE_TAG = "${IMAGE_NAME}:${env.GIT_COMMIT}"
         RELEASE_TAG = "0.1.4"
         KUBECONFIG = credentials('kubeconfig-credentials-id')
-        MYTAG = "{TAG_NAME}"
+        MYTAG = "${TAG_NAME}"
         
     }
 
