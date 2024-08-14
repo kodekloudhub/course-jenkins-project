@@ -14,12 +14,13 @@ pipeline {
     stages {
         stage('Only Run if Pull Request') {
             steps {
-                expression {
-                    return env.action == 'opened'
+                when {
+                    expression {
+                        return env.action == 'opened'
+                    }
                 }
                 script {
                     echo "${env.action}"
-                    echo "${action}"
                     sh "printenv"
                     echo "PR Has been opened: ${env.pullRequestNumber}"
                 }
