@@ -14,6 +14,21 @@ pytest = "^8.3.2"
 requests = "^2.32.3"
 
 
+[tool.poetry.group.dev.dependencies]
+python-semantic-release = "^9.8.6"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.semantic_release]
+version_toml = [
+    "pyproject.toml:tool.poetry.version",
+]
+branch = "main"
+upload_to_release = true
+upload_to_pypi = false
+allow_zero_version = true
+tag_format = "v{version}"
+remote.type = "gitlab"
+build_command = "pip install poetry && poetry build"

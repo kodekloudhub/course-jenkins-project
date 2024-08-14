@@ -9,25 +9,8 @@ pipeline {
    
         
     }
-
-    trigger {
-        githubPush()
-    }
-
-
-    
+  
     stages {
-
-        stage('printenv') {
-
-            steps {
-                script {
-                    sh "printenv"
-                }
-            }
-        }
-
-
         stage('Only Run if Pull Request') {
 
             when {
@@ -46,36 +29,16 @@ pipeline {
         }
 
         
-        stage("Check for Git Tag") {
+
+
+        stage('Test') {
             steps {
-                script {
-                    def tag = sh(returnStdout: true, script: "git tag --contains").trim()
-
-                    if (tag != null) {
-                        env.GIT_TAG = tag
-                    } else {
-                        env.GIT_TAG = ''
-                    }
-                    echo "GIT_TAG is set to: ${env.GIT_TAG}"
-                }
-            }
-        }
-
-        stage("blah") {
-            when {
-                expression {
-                    return env.GIT_TAG != "" // Only run if GIT_TAG is not empty
-                }
-            }
-
-            steps {
-                echo "yeah we detected a tag: ${GIT_TAG}"
-
+                sh "poetry run pytest"
             }
         }
 
 
-        stage('Setup') {
+        stage('tag') {
             steps {
                 echo "My tags: ${GIT_TAG}"
 
@@ -83,22 +46,29 @@ pipeline {
                     sh """
                         git config user.name 'jenkins'
                         git config user.email 'jenkins@example.com'
+                        git tag -a ${RELEASE_TAG} -m 'Taggign commit ${env.GIT_COMMIT}'
+                        git push https://${GITHUB_TOKEN}@github.com/kodekloudhub/course-jenkins-project ${RELEASE_TAG}
                     """
                 }
 
             }
         }
-        stage('Test') {
-            steps {
-                sh "poetry run pytest"
-            }
-        }
+        
 
         stage('Login to docker hub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                 sh 'echo ${PASSWORD} | docker login -u ${USERNAME} --password-stdin'}
                 echo 'Login successfully'
+            }
+        }
+
+        stage('Push Docker Image')
+        {
+            steps
+            {
+                sh 'docker push --all-tags ${IMAGE_NAME}'
+                echo "Docker image push successfully"
             }
         }
 
