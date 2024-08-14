@@ -22,7 +22,7 @@ pipeline {
                         env.GIT_TAG = tag
                      
                     }
-                    echo "${GIT_TAG}"
+                    
                 }
             }
         }   
