@@ -73,3 +73,32 @@ stage('Setup') {
 
             }
         }
+
+
+        stage('Only Run if PR is Merged') {
+            when {
+                expression {
+                    return env.action == 'closed' && env.pullRequestMerged == 'true'
+                }
+
+            }
+            steps {
+                script {
+                    echo "PR is closed, commit: ${env.mergeCommitSha}"
+                }
+            }
+        }
+
+        stage('Only Run if PR is Merged') {
+            when {
+                expression {
+                    return env.action == 'closed' && env.pullRequestMerged == 'true'
+                }
+
+            }
+            steps {
+                script {
+                    echo "PR is closed, commit: ${env.mergeCommitSha}"
+                }
+            }
+        }

@@ -10,38 +10,19 @@ pipeline {
         
     }
 
-     triggers {
-        githubPush()
-    }
 
     
     stages {
 
-        stage('not changerequest') {
-            when {
-                    not {
-                        changeRequest()
-                    }
-            }
+        stage('printenv') {
+
             steps {
                 script {
-                    def changeRequest = changeRequest()
-                    echo "yeah not changeRequest"
-                    echo "changerequest: ${changeRequest}"
                     sh "printenv"
                 }
             }
         }
 
-        stage('changerequest') {
-            when {
-                        changeRequest()
-        
-            }
-            steps {
-                echo "yeah this is a PR"
-            }
-        }
 
         stage('Only Run if Pull Request') {
 
@@ -60,20 +41,7 @@ pipeline {
             }
         }
 
-        stage('Only Run if PR is Merged') {
-            when {
-                expression {
-                    return env.action == 'closed' && env.pullRequestMerged == 'true'
-                }
-
-            }
-            steps {
-                script {
-                    echo "PR is closed, commit: ${env.mergeCommitSha}"
-                }
-            }
-        }
-
+        
         stage("Check for Git Tag") {
             steps {
                 script {
