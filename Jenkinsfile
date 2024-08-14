@@ -4,8 +4,9 @@ pipeline {
     environment {
         IMAGE_NAME = 'sanjeevkt720/jenkins-flask-app'
         IMAGE_TAG = "${IMAGE_NAME}:${env.GIT_COMMIT}"
-        RELEASE_TAG = "0.1.3"
+        RELEASE_TAG = "0.1.4"
         KUBECONFIG = credentials('kubeconfig-credentials-id')
+
         
     }
 
@@ -15,13 +16,13 @@ pipeline {
 
         stage('Setup') {
             steps {
+                echo "My tag: ${TAG_NAME}"
 
                 withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
                     sh """
                         git config user.name 'jenkins'
                         git config user.email 'jenkins@example.com'
-                        git tag -a ${RELEASE_TAG} -m 'Taggign commit ${env.GIT_COMMIT}'
-                        git push https://${GITHUB_TOKEN}@github.com/kodekloudhub/course-jenkins-project ${RELEASE_TAG}
+
                     """
                 }
 
