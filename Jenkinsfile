@@ -12,10 +12,24 @@ pipeline {
 
     
     stages {
-        stage('initialization') {
+        stage('Only Run if Pull Request') {
             steps {
+                expression {
+                    return env.action == 'opened'
+                }
                 script {
-                    sh 'printenv'
+                    sh 'PR Has been opened: ${env.pullRequestNumber}'
+                }
+            }
+        }
+
+        stage('Only Run if PR is Merged') {
+            steps {
+                expression {
+                    return env.action == 'closed' && env.pullRequestMerged == 'true'
+                }
+                script {
+                    sh 'PR is closed, commit: ${env.mergeCommitSha}'
                 }
             }
         }
