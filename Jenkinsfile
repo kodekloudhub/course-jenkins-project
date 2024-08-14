@@ -11,9 +11,7 @@ pipeline {
     }
 
      triggers {
-        githubPullRequest {
-            // This will set up a trigger to react to PR events
-        }
+        githubPullRequest()
     }
 
     
