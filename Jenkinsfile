@@ -16,16 +16,15 @@ pipeline {
         stage("Check for Git Tag") {
             steps {
                 script {
-                    def status = sh(script: "git describe --tags --exact-match", returnStatus: true)
-                    if (status == 0) {
-                        def tag = sh(script: "git describe --tags --exact-match", returnStdout: true).trim()
-                        // Check if the tag is not null and follows semantic versioning
-                        if (tag != null && tag =~ /^v[0-9]+\\.[0-9]+\\.[0-9]+$/) {
-                            GIT_TAG = tag
-                        }
+                    def tag = sh(returnStdout: true, script: "git tag --contains").trim()
+                    if (tag != null && tag =~ /^v[0-9]+\\.[0-9]+\\.[0-9]+$/) {
+
+                        GIT_TAG = tag
+                     
+                    }
                 }
             }
-        }
+        }   
 
         stage("blah") {
             when {
