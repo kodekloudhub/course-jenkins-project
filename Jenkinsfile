@@ -10,6 +10,10 @@ pipeline {
         
     }
 
+    trigger {
+        githubPush()
+    }
+
 
     
     stages {
