@@ -6,7 +6,7 @@ pipeline {
         IMAGE_TAG = "${IMAGE_NAME}:${env.GIT_COMMIT}"
         RELEASE_TAG = "0.1.4"
         KUBECONFIG = credentials('kubeconfig-credentials-id')
-        GIT_TAG = ''
+   
         
     }
 
@@ -18,14 +18,14 @@ pipeline {
                 script {
                     def tag = sh(returnStdout: true, script: "git tag --contains").trim()
                     if (tag != null && tag =~ /^v[0-9]+\\.[0-9]+\\.[0-9]+$/) {
-
                         env.GIT_TAG = tag
-                     
+                    } else {
+                        env.GIT_TAG = ''
                     }
-                    
+                    echo "GIT_TAG is set to: ${env.GIT_TAG}"
                 }
             }
-        }   
+        }
 
         stage("blah") {
             when {
