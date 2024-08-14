@@ -13,7 +13,7 @@ pipeline {
     
     stages {
 
-        stage('bluh') {
+        stage('changerequest') {
             when {
                     not {
                         changeRequest()
@@ -24,15 +24,6 @@ pipeline {
             }
         }
 
-        stage('bluh') {
-            when {
-                        changeRequest()
-
-            }
-            steps {
-                sh "yeah changeRequest"
-            }
-        }
         stage('Only Run if Pull Request') {
 
             when {
