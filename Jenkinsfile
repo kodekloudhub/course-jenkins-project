@@ -15,8 +15,15 @@ pipeline {
 
         stage('Setup') {
             steps {
-                sh "git tag -a ${RELEASE_TAG} -m 'Taggign commit ${env.GIT_COMMIT}'"
-                sh "git push origin ${RELEASE_TAG}"
+
+                withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
+                    sh """
+                        git config user.name 'jenkins'
+                        git config user.email 'jenkins@example.com'
+                        sh "git tag -a ${RELEASE_TAG} -m 'Taggign commit ${env.GIT_COMMIT}'"
+                        sh "git push origin ${RELEASE_TAG}"
+                    """
+                }
 
             }
         }
