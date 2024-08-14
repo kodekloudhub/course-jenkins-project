@@ -16,7 +16,7 @@ pipeline {
 
         stage('Setup') {
             steps {
-                echo "My tag: ${TAG_NAME}"
+                echo "My tag: ${MYTAG}"
 
                 withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
                     sh """
