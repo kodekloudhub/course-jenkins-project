@@ -15,7 +15,7 @@ pipeline {
         stage('initialization') {
             steps {
                 script {
-                    echo "${CHANGE_ID}"
+                    sh 'printenv'
                 }
             }
         }
