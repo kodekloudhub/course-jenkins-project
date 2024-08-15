@@ -33,4 +33,5 @@ tag_format = "v{version}"
 remote.type = "github"
 build_command = "poetry build"
 repository_username = "jenkins"
+token = { env = "GH_TOKEN" }
 
