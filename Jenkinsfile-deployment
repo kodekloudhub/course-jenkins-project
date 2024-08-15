@@ -30,7 +30,7 @@ pipeline {
                     sh "git pull"
                     sh "git rev-parse HEAD"
                     
-                    def tag = sh(returnStdout: true, script: "git tag --contains").trim()
+                    
 
                     if (tag != null) {
                         env.GIT_TAG = tag
