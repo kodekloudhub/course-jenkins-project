@@ -31,7 +31,7 @@ pipeline {
                     def newTag = tagMatches ? tagMatches[0] : null
                     def newCommit = commitMatches ? commitMatches[0] : null
 
-                    def test = sh(script: "git describe --tags $(git rev-list --tags --max-count=1)", returnStdout: true).trim()
+                    
                     if (!newTag || !newCommit) {
                         error("Failed to determine new tag or commit from semantic-release output.")
                     }
