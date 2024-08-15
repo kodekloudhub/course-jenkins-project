@@ -5,18 +5,23 @@ pipeline {
     
 
     stages {
-        stage('build and lint'){
+
+        stage('lint and format') {
             stages {
-                stage('build') {
-                    echo "running build nested stage"
+                stage('linting'){
+                    steps {
+                        echo "linting code in nested stage"
+                    }
                 }
 
-                stage('lint') {
-                    echo "running lint nested stage"
+                stage('formatting'){
+                    steps {
+                       echo "formatting code in nested stage" 
+                    }
                 }
             }
         }
-        
+
 
         stage('Setup') {
             steps {
