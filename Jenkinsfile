@@ -8,7 +8,7 @@ pipeline {
 
         stage('lint and format') {
             parallel {
-                stages {
+                
                     stage('linting'){
                         steps {
                             sh "sleep 30"
@@ -20,7 +20,7 @@ pipeline {
                             sh "sleep 30"
                         }
                     }
-                }
+            
             }
         }
 
