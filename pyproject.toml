@@ -32,3 +32,5 @@ allow_zero_version = true
 tag_format = "v{version}"
 remote.type = "github"
 build_command = "pip install poetry && poetry build"
+repository_username = "jenkins"
+repository_password = {env.GH_TOKEN}
