@@ -5,6 +5,18 @@ pipeline {
     
 
     stages {
+        stage('build and lint'){
+            stages {
+                stage('build') {
+                    echo "running build nested stage"
+                }
+
+                stage('lint') {
+                    echo "running lint nested stage"
+                }
+            }
+        }
+        
 
         stage('Setup') {
             steps {
