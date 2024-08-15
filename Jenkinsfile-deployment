@@ -23,16 +23,22 @@ pipeline {
                     sh "poetry install --with dev"
                     sh "poetry run semantic-release version"
 
-                    def releaseOutput = sh(script: 'poetry run semantic-release publish', returnStdout: true).trim()
+                    sh "poetry run semantic-release publish"
+                    sh "git rev-parse HEAD"
+                    sh "git pull"
+                    sh "git rev-parse HEAD"
                     
-                    // Extract the tag and commit from the release output
-                    def tagMatches = (releaseOutput =~ /(?<=Published version: )[\S]+/)
-                    def commitMatches = (releaseOutput =~ /(?<=with commit: )[\S]+/)
-                    def newTag = tagMatches ? tagMatches[0] : null
-                    def newCommit = commitMatches ? commitMatches[0] : null
+                    def tag = sh(returnStdout: true, script: "git tag --contains").trim()
+
+                    if (tag != null) {
+                        env.GIT_TAG = tag
+                    } else {
+                        env.GIT_TAG = ''
+                    }
+                    
 
                     
-                    if (!newTag || !newCommit) {
+                    if (env.GIT_TAG == '') {
                         error("Failed to determine new tag or commit from semantic-release output.")
                     }
                     
