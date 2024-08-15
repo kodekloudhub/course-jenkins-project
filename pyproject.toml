@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "flask-app"
-version = "0.1.0"
+version = "2.0.1"
 description = ""
 authors = ["sanjeev <sanjeev@example.com>"]
 readme = "README.md"
@@ -31,6 +31,6 @@ upload_to_pypi = false
 allow_zero_version = true
 tag_format = "v{version}"
 remote.type = "github"
-build_command = "pip install poetry && poetry build"
+build_command = "poetry build"
 repository_username = "jenkins"
 
