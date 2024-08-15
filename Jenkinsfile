@@ -1,9 +1,5 @@
 pipeline {
     agent any
-
-    environment {
-        SERVER_IP = credentials('prod-server-ip')
-    }
     stages {
 
         stage('Checkout') {
