@@ -19,6 +19,7 @@ pipeline {
 
             steps {
                 script {
+                    sh "poetry install"
                     sh "poetry semantic-release version"
                 }
             }
