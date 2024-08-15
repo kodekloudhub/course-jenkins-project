@@ -12,13 +12,13 @@ pipeline {
         stage('Setup') {
             steps {
                 sh "pip install -r requirements.txt"
-                echo 'The Server IP is ${SERVER_HOST}'
+                echo "The Server IP is ${SERVER_HOST}"
             }
         }
         stage('Test') {
             steps {
                 sh "pytest"
-                echo 'Server Username: ${USERNAME} Password: ${PASSWORD}'
+                echo "Server Username: ${USERNAME} Password: ${PASSWORD}"
             }
         }    
             
