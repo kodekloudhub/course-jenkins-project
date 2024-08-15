@@ -20,7 +20,7 @@ pipeline {
         stage('Test') {
             steps {
                 sh "pytest"
-                echo "The DB username: ${USERNAME} and the password is: ${PASSWORD}"
+                echo "Commit: ${env.GIT_COMMIT}"
             }
         }    
             
