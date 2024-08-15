@@ -7,16 +7,18 @@ pipeline {
     stages {
 
         stage('lint and format') {
-            stages {
-                stage('linting'){
-                    steps {
-                        echo "linting code in nested stage"
+            parallel {
+                stages {
+                    stage('linting'){
+                        steps {
+                            sh "sleep 30"
+                        }
                     }
-                }
 
-                stage('formatting'){
-                    steps {
-                       echo "formatting code in nested stage" 
+                    stage('formatting'){
+                        steps {
+                            sh "sleep 30"
+                        }
                     }
                 }
             }
