@@ -22,7 +22,24 @@ pipeline {
                     sh "printenv"
                     sh "poetry install --with dev"
                     sh "poetry run semantic-release version"
-                    sh "poetry run semantic-release publish"
+
+                    def releaseOutput = sh(script: 'poetry run semantic-release publish', returnStdout: true).trim()
+                    
+                    // Extract the tag and commit from the release output
+                    def tagMatches = (releaseOutput =~ /(?<=Published version: )[\S]+/)
+                    def commitMatches = (releaseOutput =~ /(?<=with commit: )[\S]+/)
+                    def newTag = tagMatches ? tagMatches[0] : null
+                    def newCommit = commitMatches ? commitMatches[0] : null
+
+                    if (!newTag || !newCommit) {
+                        error("Failed to determine new tag or commit from semantic-release output.")
+                    }
+                    
+                    // Store the newTag and newCommit in the environment for later stages
+                    env.NEW_TAG = newTag
+                    env.NEW_COMMIT = newCommit
+
+                    echo "Published new tag: ${env.NEW_TAG}, commit: ${env.NEW_COMMIT}"
                 }
             }
         }
