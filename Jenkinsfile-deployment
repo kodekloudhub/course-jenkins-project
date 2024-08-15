@@ -21,6 +21,7 @@ pipeline {
                 script {
                     sh "printenv"
                     sh "poetry install --with dev"
+                    sh "poetry run semantic-release version"
                     sh "poetry run semantic-release publish"
                 }
             }
