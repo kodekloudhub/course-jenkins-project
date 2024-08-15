@@ -30,5 +30,5 @@ upload_to_release = true
 upload_to_pypi = false
 allow_zero_version = true
 tag_format = "v{version}"
-remote.type = "gitlab"
+remote.type = "github"
 build_command = "pip install poetry && poetry build"
