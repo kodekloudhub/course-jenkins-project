@@ -27,9 +27,7 @@ pipeline {
                     sh "git rev-parse HEAD"
 
                     sh "poetry run semantic-release publish"
-                    sh "git rev-parse HEAD"
-                    sh "git pull"
-                    sh "git rev-parse HEAD"
+
                     
                     
 
@@ -46,10 +44,8 @@ pipeline {
                     }
                     
                     // Store the newTag and newCommit in the environment for later stages
-                    env.NEW_TAG = newTag
-                    env.NEW_COMMIT = newCommit
 
-                    echo "Published new tag: ${env.NEW_TAG}, commit: ${env.NEW_COMMIT}"
+                    echo "Published new tag: ${env.GIT_TAG}"
                 }
             }
         }
