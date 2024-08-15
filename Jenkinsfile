@@ -2,78 +2,45 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'sanjeevkt720/jenkins-flask-app'
-        IMAGE_TAG = "${IMAGE_NAME}:${env.GIT_COMMIT}"
-        RELEASE_TAG = "0.1.4"
-        KUBECONFIG = credentials('kubeconfig-credentials-id')
-   
-        
+        SERVER_IP = credentials('prod-server-ip')
     }
-  
     stages {
-        stage('Only Run if Pull Request') {
-
-            when {
-                    expression {
-                        return env.action == 'opened'
-                    }
-                }
+        stage('Setup') {
             steps {
-                
-                script {
-                    echo "${env.action}"
-                    sh "printenv"
-                    echo "PR Has been opened: ${env.pullRequestNumber}"
-                }
+                sh "pip install -r requirements.txt"
             }
         }
-
-        
-
-
         stage('Test') {
             steps {
-                sh "poetry run pytest"
+                sh "pytest"
             }
         }
 
-
-        stage('tag') {
+        stage('Package code') {
             steps {
-                echo "My tags: ${GIT_TAG}"
+                sh "zip -r myapp.zip ./* -x '*.git*'"
+                sh "ls -lart"
+            }
+        }
 
-                withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
-                    sh """
-                        git config user.name 'jenkins'
-                        git config user.email 'jenkins@example.com'
-                        git tag -a ${RELEASE_TAG} -m 'Taggign commit ${env.GIT_COMMIT}'
-                        git push https://${GITHUB_TOKEN}@github.com/kodekloudhub/course-jenkins-project ${RELEASE_TAG}
-                    """
+        stage('Deploy to Prod') {
+            steps {
+                withCredentials([sshUserPrivateKey(credentialsId: 'ssh-key', keyFileVariable: 'MY_SSH_KEY', usernameVariable: 'username')]) {
+                    sh '''
+                    scp -i $MY_SSH_KEY -o StrictHostKeyChecking=no myapp.zip  ${username}@${SERVER_IP}:/home/ec2-user/
+                    ssh -i $MY_SSH_KEY -o StrictHostKeyChecking=no ${username}@${SERVER_IP} << EOF
+                        unzip -o /home/ec2-user/app/myapp.zip -d /home/ec2-user/app/
+                        source app/venv/bin/activate
+                        pip install -r requirements.txt
+                        sudo systemctl restart flaskapp.service
+EOF
+                    '''
                 }
-
             }
         }
+       
         
-
-        stage('Login to docker hub') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                sh 'echo ${PASSWORD} | docker login -u ${USERNAME} --password-stdin'}
-                echo 'Login successfully'
-            }
-        }
-
-        stage('Push Docker Image')
-        {
-            steps
-            {
-                sh 'docker push --all-tags ${IMAGE_NAME}'
-                echo "Docker image push successfully"
-            }
-        }
-
-
-    
+       
         
     }
 }
