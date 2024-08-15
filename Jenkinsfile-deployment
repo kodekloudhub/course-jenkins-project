@@ -21,7 +21,9 @@ pipeline {
                 script {
                     sh "printenv"
                     sh "poetry install --with dev"
-                    sh "poetry run semantic-release version"
+                    sh "git rev-parse HEAD"
+                    def tag = sh(returnStdout: true, script: "poetry run semantic-release version --print-tag").trim()
+                    sh "git rev-parse HEAD"
 
                     sh "poetry run semantic-release publish"
                     sh "git rev-parse HEAD"
