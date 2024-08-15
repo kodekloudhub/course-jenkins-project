@@ -23,6 +23,7 @@ pipeline {
                     sh "poetry install --with dev"
                     sh "git rev-parse HEAD"
                     def tag = sh(returnStdout: true, script: "poetry run semantic-release version --print-tag").trim()
+                    echo "${tag}"
                     sh "git rev-parse HEAD"
 
                     sh "poetry run semantic-release publish"
