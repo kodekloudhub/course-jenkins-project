@@ -1,18 +1,7 @@
 pipeline {
     agent any
 
-    options {
-        timeout(time: 1, unit: 'MINUTES')
-    }
-    
-
     stages {
-
-        stage('lint and format') {
-            steps {
-                sh "sleep 70"
-            }
-        }
 
 
         stage('Setup') {
@@ -35,6 +24,17 @@ pipeline {
                 
             }
         }    
+        stage('Deployment') {
+            input {
+                message "Do you want to proceed further?"
+                ok "Yes"
+            }
+            steps {
+                echo "Running Deployment"
+                
+            }
+        } 
+        
             
     }
 }
