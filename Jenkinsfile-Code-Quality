@@ -1,6 +1,11 @@
 pipeline {
     agent any
     stages {
+        stage('blah') {
+            steps {
+                sh 'printenv'
+            }
+        }
         stage('Verify Code Quality') {
 
             when {
