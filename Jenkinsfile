@@ -16,7 +16,7 @@ pipeline {
             steps {
                 echo "${KUBECONFIG}"
                 sh 'kubectl config current-context'
-                sh 'ls -la'
+                sh 'ls -la $KUBECONFIG'
                 sh 'whoami'
                 sh 'kubectl config view'
                 sh "pip install -r requirements.txt"
