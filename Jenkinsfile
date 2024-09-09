@@ -24,7 +24,7 @@ pipeline {
             }
         }
 
-        stage('Setup') {
+        stage('stage2') {
             steps {
                 script {
                     echo "${IMAGE_TAG_COMMIT}"
