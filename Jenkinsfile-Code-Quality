@@ -1,0 +1,28 @@
+pipeline {
+    agent any
+    stages {
+        stage('Verify Code Quality') {
+
+            when {
+                    expression {
+                        return env.action == 'opened'
+                    }
+            }
+            stages {
+                stage('Get PullRequestNumber') {
+                    steps {
+                        script {
+                            echo "PR Has been opened: ${env.pullRequestNumber}"
+                        }
+                    }
+                }
+
+                stage('Test') {
+                    steps {
+                        sh "poetry run pytest"
+                    }
+                }
+            }
+        }      
+    }
+}
