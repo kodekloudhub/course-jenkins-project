@@ -16,6 +16,7 @@ pipeline {
             steps {
                 echo "${KUBECONFIG}"
                 sh 'kubectl config current-context'
+                sh 'kubectl config view'
                 sh "pip install -r requirements.txt"
             }
         }
