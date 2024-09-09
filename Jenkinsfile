@@ -14,7 +14,7 @@ pipeline {
     stages {
         stage('Setup') {
             steps {
-                
+                sh 'ls -la $KUBECONFIG'
                 sh "pip install -r requirements.txt"
             }
         }
