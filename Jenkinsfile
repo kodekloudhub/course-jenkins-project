@@ -4,12 +4,12 @@ pipeline {
     environment {
         IMAGE_NAME = 'sanjeevkt720/jenkins-flask-app'
         IMAGE_TAG = "${IMAGE_NAME}:${env.GIT_COMMIT}"
+        KUBECONFIG = credentials('kubeconfig-credentials-id')
         
     }
 
     
     stages {
-
         stage('Setup') {
             steps {
                 sh "pip install -r requirements.txt"
@@ -47,6 +47,39 @@ pipeline {
                 sh 'docker push ${IMAGE_TAG}'
                 echo "Docker image push successfully"
             }
-        }      
+        }
+
+        stage('Deploy to Staging')
+        {
+            steps {
+                sh 'kubectl config use-context user@staging.us-east-1.eksctl.io'
+                sh 'kubectl config current-context'
+                sh "kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}"
+            }
+        }
+
+        stage('Acceptance Test')
+        {
+            steps {
+
+                script {
+
+                    def service = sh(script: "kubectl get svc flask-app-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}:{.spec.ports[0].port}'", returnStdout: true).trim()
+                    echo "${service}"
+
+                    sh 'k6 run -e SERVICE=${service} acceptance-test.js'
+                }
+            }
+        }
+        stage('Deploy to Prod')
+        {
+            steps {
+                sh 'kubectl config use-context user@prod.us-east-1.eksctl.io'
+                sh 'kubectl config current-context'
+                sh "kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}"
+            }
+        }       
+
+        
     }
 }
