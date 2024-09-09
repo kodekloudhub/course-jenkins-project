@@ -12,6 +12,8 @@ pipeline {
     stages {
         stage('Setup') {
             steps {
+                echo "${KUBECONFIG}"
+                sh 'kubectl config current-context'
                 sh "pip install -r requirements.txt"
             }
         }
