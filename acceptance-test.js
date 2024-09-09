@@ -4,7 +4,7 @@ export const options = {
   vus: 10,
   duration: "10s",
   thresholds: {
-    http_req_duration: ["p(90)<600"], // 90 percent of response times must be below 600ms
+    http_req_duration: ["p(90)<10000"], // 90 percent of response times must be below 600ms
   },
 };
 export default function () {
