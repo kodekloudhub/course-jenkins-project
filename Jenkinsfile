@@ -15,6 +15,8 @@ pipeline {
         stage('Setup') {
             steps {
                 sh 'ls -la $KUBECONFIG'
+                sh 'chmod 644 $KUBECONFIG'
+                sh 'ls -la $KUBECONFIG'
                 sh "pip install -r requirements.txt"
             }
         }
