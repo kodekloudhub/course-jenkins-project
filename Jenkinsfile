@@ -5,7 +5,8 @@ pipeline {
         IMAGE_NAME = 'sanjeevkt720/jenkins-flask-app'
         IMAGE_TAG = "${IMAGE_NAME}:${env.GIT_COMMIT}"
         KUBECONFIG = credentials('kubeconfig-credentials-id')
-
+        AWS_ACCESS_KEY_ID = credentials('aws-access-key')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')
         
     }
 
@@ -13,13 +14,7 @@ pipeline {
     stages {
         stage('Setup') {
             steps {
-                echo "${KUBECONFIG}"
-                sh 'kubectl config current-context'
-                sh 'ls -la $KUBECONFIG'
-                sh 'chmod 644 $KUBECONFIG'
-                sh 'ls -la $KUBECONFIG'
-                sh 'whoami'
-                sh 'kubectl config view'
+                
                 sh "pip install -r requirements.txt"
             }
         }
