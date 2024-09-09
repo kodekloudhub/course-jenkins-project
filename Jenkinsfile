@@ -4,7 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = 'sanjeevkt720/jenkins-flask-app'
         IMAGE_TAG_COMMIT = "${IMAGE_NAME}:${env.GIT_COMMIT}"
-        IMAGE_TAG_RELEASE = "${IMAGE_NAME}:${env.GIT_TAG}"
+        IMAGE_TAG_RELEASE = "${IMAGE_NAME}:${GIT_TAG}"
         
     }
 
