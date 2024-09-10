@@ -14,6 +14,21 @@ pipeline {
 
     stages {
 
+        stage("Check for Git Tag") {
+            steps {
+                script {
+                    def tag = sh(returnStdout: true, script: "git tag --contains").trim()
+
+                    if (tag != null) {
+                        env.GIT_TAG = tag
+                    } else {
+                        env.GIT_TAG = ''
+                    }
+                    echo "GIT_TAG is set to: ${env.GIT_TAG}"
+                }
+            }
+        }
+
         stage('Setup') {
             steps {
                 script {
@@ -23,6 +38,11 @@ pipeline {
         }
 
         stage('Create Release') {
+            when {
+                expression {
+                    return env.GIT_TAG == "" // Only run if GIT_TAG is not set
+                }
+            }
             steps {
                 script {
                     def tag = sh(returnStdout: true, script: "poetry run semantic-release version").trim()
@@ -30,19 +50,8 @@ pipeline {
 
                     sh "poetry run semantic-release publish"
 
-                    if (tag != null) {
-                        env.GIT_TAG = tag
-                    } else {
-                        env.GIT_TAG = ''
-                    }
-                
-                    if (env.GIT_TAG == '') {
-                        error("Failed to determine new tag or commit from semantic-release output.")
-                    }
 
-                    env.IMAGE_TAG_RELEASE = "${IMAGE_NAME}:${GIT_TAG}"
-
-                    echo "Published new tag: ${env.GIT_TAG}"
+                    echo "Published new tag: ${tag}"
                 }
             }
         }
