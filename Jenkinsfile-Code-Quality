@@ -1,7 +1,7 @@
 pipeline {
     agent any
     stages {
-        stage('blah') {
+        stage('environment variables') {
             steps {
                 sh 'printenv'
             }
