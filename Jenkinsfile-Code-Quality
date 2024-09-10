@@ -8,7 +8,11 @@ pipeline {
             }
         }
         stage('Verify Code Quality') {
-
+            when {
+                    expression {
+                        return env.action == 'opened'
+                    }
+            }
             stages {
                 stage('Get PullRequestNumber') {
                     steps {
