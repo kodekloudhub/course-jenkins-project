@@ -25,6 +25,7 @@ pipeline {
                         env.GIT_TAG = ''
                     }
                     echo "GIT_TAG is set to: ${env.GIT_TAG}"
+                    env.IMAGE_TAG_RELEASE = "${IMAGE_NAME}:${GIT_TAG}"
                 }
             }
         }
