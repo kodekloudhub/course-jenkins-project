@@ -5,35 +5,45 @@ pipeline {
             steps {
                 sh 'printenv'
                 sh 'ls -la'
+                sh 'cat Jenkinsfile-Code-Quality'
             }
         }
-        stage('Verify Code Quality') {
+        stage('Only push to main') {
             when {
-                    expression {
-                        return env.action == 'opened'
-                    }
+                branch 'main'
             }
-            stages {
-                stage('Get PullRequestNumber') {
-                    steps {
-                        script {
-                            echo "PR Has been opened: ${env.pullRequestNumber}"
-                        }
-                    }
-                }
-
-                stage('Setup') {
-                    steps {
-                        sh "poetry install --with dev"
-                    }
-                }
-
-                stage('Test') {
-                    steps {
-                        sh "poetry run pytest"
-                    }
+            steps {
+                echo 'Only on push to main'
+            }
+        }
+        stage('Only when not main branch') {
+            when {
+                not {
+                    branch 'main'
                 }
             }
-        }      
+            steps {
+                echo 'Only when not branch main'
+            }
+        }
+        stage('Only pull request to main') {
+            when {
+                changeRequest target: 'main'
+            }
+            steps {
+                echo 'Only on pull request to main'
+            }
+        }            
+        stage('Setup') {
+            steps {
+                sh "poetry install --with dev"
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh "poetry run pytest"
+            }
+        }    
     }
 }
