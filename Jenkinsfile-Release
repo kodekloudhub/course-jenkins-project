@@ -7,7 +7,7 @@ pipeline {
         KUBECONFIG = credentials('kubeconfig-credentials-id')
         AWS_ACCESS_KEY_ID = credentials('aws-access-key')
         AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')
-        GH_TOKEN = credentials('github-token')
+        GH_TOKEN_PSW = credentials('github-access-token')
     }
 
 
@@ -46,6 +46,7 @@ pipeline {
             }
             steps {
                 script {
+                    env.GH_TOKEN = "${GH_TOKEN_PSW}"
                     def tag = sh(returnStdout: true, script: "poetry run semantic-release version").trim()
                     echo "${tag}"
 
