@@ -6,7 +6,17 @@ pipeline {
                 sh 'printenv'
                 sh 'ls -la'
             }
+        }       
+        stage('Setup') {
+            steps {
+                sh "poetry install --with dev"
+            }
         }
-        
+
+        stage('Test') {
+            steps {
+                sh "poetry run pytest"
+            }
+        }    
     }
 }
