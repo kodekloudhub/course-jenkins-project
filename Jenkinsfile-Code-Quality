@@ -14,7 +14,7 @@ pipeline {
                 changeRequest target: 'main'
             }
             steps {
-                echo 'Only on pull request to main'
+                echo 'PR: ${CHANGE_ID}'
             }
         }            
         stage('Setup') {
