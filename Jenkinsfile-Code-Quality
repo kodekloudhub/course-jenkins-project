@@ -16,7 +16,7 @@ pipeline {
                 echo 'Only on push to main'
             }
         }
-        stage('Only pull request to main') {
+        stage('Only when not main branch') {
             when {
                 not {
                     branch 'main'
