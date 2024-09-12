@@ -46,7 +46,7 @@ pipeline {
             }
             steps {
                 script {
-                    env.GH_TOKEN = "${GH_TOKEN_PSW}"
+                    
                     sh 'printenv'
                     def tag = sh(returnStdout: true, script: "poetry run semantic-release version").trim()
                     echo "${tag}"
