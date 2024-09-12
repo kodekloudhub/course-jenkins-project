@@ -5,6 +5,7 @@ pipeline {
             steps {
                 sh 'printenv'
                 sh 'ls -la'
+                sh 'cat Jenkinsfile-Code-Quality'
             }
         }       
         stage('Setup') {
