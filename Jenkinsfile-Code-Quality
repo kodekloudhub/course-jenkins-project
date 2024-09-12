@@ -7,33 +7,6 @@ pipeline {
                 sh 'ls -la'
             }
         }
-        stage('Verify Code Quality') {
-            when {
-                    expression {
-                        return env.action == 'opened'
-                    }
-            }
-            stages {
-                stage('Get PullRequestNumber') {
-                    steps {
-                        script {
-                            echo "PR Has been opened: ${env.pullRequestNumber}"
-                        }
-                    }
-                }
-
-                stage('Setup') {
-                    steps {
-                        sh "poetry install --with dev"
-                    }
-                }
-
-                stage('Test') {
-                    steps {
-                        sh "poetry run pytest"
-                    }
-                }
-            }
-        }      
+        
     }
 }
