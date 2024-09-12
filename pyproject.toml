@@ -31,5 +31,7 @@ upload_to_pypi = false
 allow_zero_version = true
 tag_format = "v{version}"
 remote.type = "github"
-token = { env = "GH_TOKEN_PSW" }
 
+
+[tool.semantic_release.remote]
+token = { env = "GH_TOKEN_PSW" }
