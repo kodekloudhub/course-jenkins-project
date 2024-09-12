@@ -14,7 +14,7 @@ pipeline {
                 changeRequest target: 'main'
             }
             steps {
-                echo 'PR: ${CHANGE_ID}'
+                echo "PR: ${CHANGE_ID}"
             }
         }            
         stage('Setup') {
