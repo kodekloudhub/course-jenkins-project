@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "flask-app"
+version = "2.20.0"
+description = ""
+authors = ["sanjeev <sanjeev@example.com>"]
+readme = "README.md"
+package-mode = false
+
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Flask = "^3.0.3"
+pytest = "^8.3.2"
+requests = "^2.32.3"
+
+
+[tool.poetry.group.dev.dependencies]
+python-semantic-release = "^9.8.6"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.semantic_release]
+version_toml = [
+    "pyproject.toml:tool.poetry.version",
+]
+branch = "main"
+upload_to_release = true
+upload_to_pypi = false
+allow_zero_version = true
+tag_format = "v{version}"
+remote.type = "github"
+remote.token.env = "GH_TOKEN_PSW"
+
+

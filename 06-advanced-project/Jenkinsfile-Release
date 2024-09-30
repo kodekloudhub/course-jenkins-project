@@ -1,0 +1,106 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = 'sanjeevkt720/jenkins-flask-app'
+        IMAGE_TAG = "${IMAGE_NAME}:${env.GIT_COMMIT}"
+        KUBECONFIG = credentials('kubeconfig-credentials-id')
+        AWS_ACCESS_KEY_ID = credentials('aws-access-key')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')
+        GH_TOKEN = credentials('github-access-token')
+    }
+
+
+
+    stages {
+
+        stage("Check for Git Tag") {
+            steps {
+                script {
+                    def tag = sh(returnStdout: true, script: "git tag --contains").trim()
+
+                    if (tag != null) {
+                        env.GIT_TAG = tag
+                    } else {
+                        env.GIT_TAG = ''
+                    }
+                    echo "GIT_TAG is set to: ${env.GIT_TAG}"
+                    env.IMAGE_TAG_RELEASE = "${IMAGE_NAME}:${GIT_TAG}"
+                }
+            }
+        }
+
+        stage('Setup') {
+            steps {
+                script {
+                    sh "poetry install --with dev"
+                }
+            }
+        }
+
+        stage('Create Release') {
+            when {
+                expression {
+                    return env.GIT_TAG == "" // Only run if GIT_TAG is not set
+                }
+            }
+            steps {
+                script {
+                    
+                    sh 'printenv'
+                    def tag = sh(returnStdout: true, script: "poetry run semantic-release version").trim()
+                    echo "${tag}"
+
+                    sh "poetry run semantic-release publish"
+
+
+                    echo "Published new tag: ${tag}"
+                }
+            }
+        }
+
+
+        stage("Build and Deploy") {
+            when {
+                expression {
+                    return env.GIT_TAG != "" // Only run if GIT_TAG is not empty
+                }
+            }
+
+            stages {
+
+                stage('Docker Login') {
+                    steps {
+                        withCredentials([usernamePassword(credentialsId: 'docker-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh 'echo ${PASSWORD} | docker login -u ${USERNAME} --password-stdin'}
+                        echo 'Login successfully'
+                    }
+                }
+                stage('Build') {
+                    steps {
+                        sh 'docker build -t ${IMAGE_TAG} -t ${IMAGE_TAG_RELEASE} .'
+                        echo "Docker image build successfully"
+                        sh 'docker image ls'
+                    }
+                }
+
+                stage('Push Image') {
+                    steps {
+                        sh 'docker push --all-tags ${IMAGE_NAME}'
+                        echo "Docker image push successfully"
+                    }
+                }
+
+                stage('Deploy') {
+                    steps {
+                        sh 'kubectl config use-context user@prod.us-east-1.eksctl.io'
+                        sh 'kubectl config current-context'
+                        sh "kubectl set image deployment/flask-app flask-app=${IMAGE_TAG_RELEASE}"
+                    }
+                }
+            }
+        }
+
+    }
+
+}

@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+    stages {
+        stage('environment variables') {
+            steps {
+                sh 'printenv'
+                sh 'ls -la'
+            }
+        }
+        
+        stage('Pull Request Number') {
+            when {
+                changeRequest target: 'main'
+            }
+            steps {
+                echo "PR: ${CHANGE_ID}"
+            }
+        }            
+        stage('Setup') {
+            steps {
+                sh "poetry install --with dev"
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh "poetry run pytest"
+            }
+        }    
+    }
+}
