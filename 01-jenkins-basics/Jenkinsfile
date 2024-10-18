@@ -5,12 +5,12 @@ pipeline {
         stage('Setup') {
             steps {
                 sh '''
-                # Use bash to source the virtual environment
-                bash -c "
+                # Remove cache files to avoid module import conflicts
                 find . -name '__pycache__' -exec rm -rf {} +
                 find . -name '*.pyc' -exec rm -rf {} +
 
-                # Create virtual environment and install dependencies
+                # Set up virtual environment
+                bash -c "
                 python3 -m venv venv
                 source venv/bin/activate
                 pip install -r 01-jenkins-basics/requirements.txt
@@ -24,7 +24,9 @@ pipeline {
                 sh '''
                 bash -c "
                 source venv/bin/activate
-                pytest
+
+                # Ensure pytest runs from the correct directory
+                PYTHONPATH=$(pwd) pytest
                 "
                 '''
             }
