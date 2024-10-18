@@ -5,14 +5,12 @@ pipeline {
         stage('Setup') {
             steps {
                 sh '''
-                # Create a Python virtual environment
+                # Use bash shell instead of sh
+                bash -c "
                 python3 -m venv venv
-                
-                # Activate the virtual environment
                 source venv/bin/activate
-                
-                # Install dependencies from requirements.txt
                 pip install -r requirements.txt
+                "
                 '''
             }
         }
@@ -20,11 +18,11 @@ pipeline {
         stage('Test') {
             steps {
                 sh '''
-                # Activate the virtual environment
+                bash -c "
                 source venv/bin/activate
-                
                 # Run tests (replace with actual test command)
                 pytest
+                "
                 '''
             }
         }
@@ -32,14 +30,13 @@ pipeline {
         stage('Deployment') {
             steps {
                 sh '''
-                # Activate the virtual environment
+                bash -c "
                 source venv/bin/activate
-                
                 # Deployment commands go here
-                echo "Deployment stage (replace with actual commands)"
+                echo 'Deployment stage (replace with actual commands)'
+                "
                 '''
             }
         }
     }
 }
-
