@@ -5,7 +5,10 @@ pipeline {
         stage('Setup') {
             steps {
                 sh '''
-                # Use bash shell instead of sh
+                # Clean up Python cache and create a virtual environment
+                find . -name '__pycache__' -exec rm -rf {} +
+                find . -name '*.pyc' -exec rm -rf {} +
+
                 bash -c "
                 python3 -m venv venv
                 source venv/bin/activate
@@ -14,7 +17,7 @@ pipeline {
                 '''
             }
         }
-        
+
         stage('Test') {
             steps {
                 sh '''
