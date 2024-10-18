@@ -2,39 +2,44 @@ pipeline {
     agent any
 
     stages {
-
-
         stage('Setup') {
             steps {
-                // withCredentials([usernamePassword(credentialsId: 'server-creds', usernameVariable: "myuser", passwordVariable: "mypassword")]) {
-
-                     //sh '''
-                     //echo ${myuser}
-                    //echo ${mypassword}
-                    //'''
-                //}
-
-                sh "pip install -r requirements.txt"
-            
+                sh '''
+                # Create a Python virtual environment
+                python3 -m venv venv
+                
+                # Activate the virtual environment
+                source venv/bin/activate
+                
+                # Install dependencies from requirements.txt
+                pip install -r requirements.txt
+                '''
             }
         }
+        
         stage('Test') {
             steps {
-                sh "pytest"
+                sh '''
+                # Activate the virtual environment
+                source venv/bin/activate
                 
+                # Run tests (replace with actual test command)
+                pytest
+                '''
             }
-        }    
+        }
+
         stage('Deployment') {
-            input {
-                message "Do you want to proceed further?"
-                ok "Yes"
-            }
             steps {
-                echo "Running Deployment"
+                sh '''
+                # Activate the virtual environment
+                source venv/bin/activate
                 
+                # Deployment commands go here
+                echo "Deployment stage (replace with actual commands)"
+                '''
             }
-        } 
-        
-            
+        }
     }
 }
+
