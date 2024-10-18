@@ -5,7 +5,7 @@ pipeline {
         stage('Setup') {
             steps {
                 sh '''
-                # Remove cache files to avoid module import conflicts
+                # Remove cache files
                 find . -name '__pycache__' -exec rm -rf {} +
                 find . -name '*.pyc' -exec rm -rf {} +
 
@@ -25,8 +25,8 @@ pipeline {
                 bash -c "
                 source venv/bin/activate
 
-                # Ensure pytest runs from the correct directory
-                PYTHONPATH=$(pwd) pytest
+                # Clear pytest cache and run tests
+                PYTHONPATH=$(pwd) pytest --cache-clear
                 "
                 '''
             }
