@@ -22,7 +22,7 @@ pipeline {
                 sh '''
                 bash -c "
                 source venv/bin/activate
-                pytest
+                pytest 02-single-server-deployment/ 04-docker/ 05-kubernetes/ 06-advanced-project/
                 "
                 '''
             }
