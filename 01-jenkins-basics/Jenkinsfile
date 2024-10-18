@@ -5,15 +5,14 @@ pipeline {
         stage('Setup') {
             steps {
                 sh '''
-                # Clean up Python cache and create a virtual environment
+                # Remove Python cache files
                 find . -name '__pycache__' -exec rm -rf {} +
                 find . -name '*.pyc' -exec rm -rf {} +
 
-                bash -c "
+                # Create virtual environment and install dependencies
                 python3 -m venv venv
                 source venv/bin/activate
                 pip install -r 01-jenkins-basics/requirements.txt
-                "
                 '''
             }
         }
@@ -23,7 +22,6 @@ pipeline {
                 sh '''
                 bash -c "
                 source venv/bin/activate
-                # Run tests (replace with actual test command)
                 pytest
                 "
                 '''
