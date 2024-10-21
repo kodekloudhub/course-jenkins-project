@@ -5,17 +5,23 @@ pipeline {
         stage('Setup') {
             steps {
                 sh '''
+                # Remove cache files
+                find . -name '__pycache__' -exec rm -rf {} +
+                find . -name '*.pyc' -exec rm -rf {} +
+
+                # Set up virtual environment
                 bash -c "
+                python3 -m venv venv
                 source venv/bin/activate
-        
-                # Debug: Check current working directory and list files
-                pwd
-                ls -al jenkins-project/
-        
-                # Clear pytest cache, set PYTHONPATH, and run tests
-                export PYTHONPATH=$(pwd)/jenkins-project
-                pytest --cache-clear --maxfail=1 --disable-warnings jenkins-project/test_jenkins_app.py
+                pip install -r 01-jenkins-basics/requirements.txt
                 "
+
+                # Rename the conflicting test file to avoid import conflicts
+                mv jenkins-project/test_app.py jenkins-project/test_jenkins_app.py || true
+
+                # Debug: List files in the jenkins-project directory to confirm renaming
+                echo 'Listing files in jenkins-project directory:'
+                ls -al jenkins-project/
                 '''
             }
         }
@@ -25,6 +31,12 @@ pipeline {
                 sh '''
                 bash -c "
                 source venv/bin/activate
+
+                # Debug: Check current working directory and list files
+                echo 'Current working directory:'
+                pwd
+                echo 'Listing files in jenkins-project directory:'
+                ls -al jenkins-project/
 
                 # Clear pytest cache, set PYTHONPATH, and run tests
                 export PYTHONPATH=$(pwd)/jenkins-project
