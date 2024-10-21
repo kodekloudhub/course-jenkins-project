@@ -16,7 +16,7 @@ pipeline {
                 pip install -r 01-jenkins-basics/requirements.txt
                 "
 
-                # Check if jenkins-project directory and test_app.py file exist before attempting rename
+                # Check if jenkins-project directory and test_app.py file exist before attempting rename...
                 if [ -d "jenkins-project" ]; then
                     echo "jenkins-project directory exists."
                     if [ -f "jenkins-project/test_app.py" ]; then
