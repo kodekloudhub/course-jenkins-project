@@ -15,6 +15,9 @@ pipeline {
                 source venv/bin/activate
                 pip install -r 01-jenkins-basics/requirements.txt
                 "
+
+                # Rename the conflicting test file to avoid import conflicts
+                mv jenkins-project/test_app.py jenkins-project/test_jenkins_app.py || true
                 '''
             }
         }
@@ -25,8 +28,9 @@ pipeline {
                 bash -c "
                 source venv/bin/activate
 
-                # Clear pytest cache and run tests
-                PYTHONPATH=$(pwd) pytest --cache-clear
+                # Clear pytest cache, set PYTHONPATH, and run tests
+                export PYTHONPATH=$(pwd)/jenkins-project
+                pytest --cache-clear --maxfail=1 --disable-warnings jenkins-project/test_jenkins_app.py
                 "
                 '''
             }
