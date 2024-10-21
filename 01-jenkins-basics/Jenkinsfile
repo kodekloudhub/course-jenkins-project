@@ -19,7 +19,7 @@ pipeline {
                 # Rename the conflicting test file to avoid import conflicts
                 mv jenkins-project/test_app.py jenkins-project/test_jenkins_app.py || true
 
-                # Debug: List files in the jenkins-project directory to confirm renaming
+                # Debug: List files in the jenkins-project directory to confirm renaming...
                 echo 'Listing files in jenkins-project directory:'
                 ls -al jenkins-project/
                 '''
