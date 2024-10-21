@@ -16,7 +16,7 @@ pipeline {
                 pip install -r 01-jenkins-basics/requirements.txt
                 "
 
-                # Rename the conflicting test file to avoid import conflicts
+                # Rename the conflicting test file to avoid import conflicts...
                 mv jenkins-project/test_app.py jenkins-project/test_jenkins_app.py || true
 
                 # Debug: List files in the jenkins-project directory to confirm renaming
