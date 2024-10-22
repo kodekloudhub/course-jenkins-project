@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: flask-app
+  template:
+    metadata:
+      labels:
+        app: flask-app
+    spec:
+      containers:
+      - name: flask-app
+        image: sanjeevkt720/jenkins-flask-app:v3
+        # resources:
+        #   limits:
+        #     memory: "128Mi"
+        #     cpu: "100m"
+        ports:
+        - containerPort: 5000
